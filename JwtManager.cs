@@ -10,11 +10,12 @@ namespace CustomFramework.Authorization
     public static class JwtManager
     {
 
-        public static string GenerateToken(List<Claim> claims, string key, string issuer, string audience, out DateTime expireDateTime, int expireInminutes = 20)
+        public static string GenerateToken(List<Claim> claims, string key, string issuer, string audience, out DateTime expireDateTime, out DateTime expireUtcDateTime, int expireInminutes = 20)
         {
             SecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            expireDateTime = DateTime.UtcNow.AddMinutes(expireInminutes);
-
+            expireUtcDateTime = DateTime.UtcNow.AddMinutes(expireInminutes);
+            expireDateTime = DateTime.Now.AddMinutes(expireInminutes);
+            
             var securityToken = new JwtSecurityToken(
                 issuer: issuer,
                 audience: audience,
